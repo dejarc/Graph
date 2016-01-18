@@ -1,10 +1,15 @@
 #include "Graph.h"
+/*Creates a graph structure*/
 graph createGraph() {
     graph myGraph = (graph)malloc(sizeof(struct Graph));
     myGraph->allVertexes = malloc(sizeof(vertex) * max_vertexes);
     myGraph->num_vertexes = 0; 
     return myGraph;
 }
+/*creates a vertex structure
+@param myName the name of the next city to input. Duplicates 
+are not allowed
+@return the new vertex*/
 vertex createVertex(char *myName) {
     int index;
     for(index = 0; index < myGraph->num_vertexes; index++) {
@@ -28,6 +33,8 @@ vertex createVertex(char *myName) {
     } 
     return myVertex;    
 }
+/*method to print the contents of a queue
+@param myQueue the queue to print*/
 void printQueue(queue myQueue) {
     node temp = myQueue->front;
     int num = 0;
@@ -40,19 +47,29 @@ void printQueue(queue myQueue) {
     }
     fprintf(fp, "\ntotal number of processes after sort %d", num);
 }
+/*Creates an edge with a cost and a destination.
+The edges in the structure are directed
+@param myDestination the destination city in the edge
+@param myCost the edge cost, between 0 and 2000 miles
+@return the new edge created*/
 edge createEdge(vertex myDestination, int myCost) {
     edge myEdge = (edge)malloc(sizeof(struct Edge));
     myEdge->destination = myDestination;
     myEdge->cost =  myCost;
     return myEdge;
 }
+/* to create a queue
+@return the new queue created*/
 queue createQueue() {
     queue myQueue = (queue)malloc(sizeof(struct PriorityQueue));
     myQueue->front = NULL;
     return myQueue;
 }
+/*method to add a node based on priority.
+@param myQueue the queue to add to
+@param myNode the new node to insert*/
 void addToQueue(queue myQueue, node myNode) {
-    if(myNode == NULL)
+    if(myNode == NULL || myQueue == NULL)
         return;
     if(myQueue->front != NULL) {
         if(myQueue->front->myVertex->cost >= myNode->myVertex->cost) {
@@ -76,6 +93,8 @@ void addToQueue(queue myQueue, node myNode) {
         myQueue->front = myNode;
     }
 }
+/*to free up all the memory in the graph
+@param myGraph the graph to destroy*/
 void deepDestroy(graph myGraph) {
     int graph_index;
     int edge_index;
@@ -87,7 +106,13 @@ void deepDestroy(graph myGraph) {
     }
     free(myGraph);
 }
+/*to create a new node.
+@param myVertex the vertex to include in the node
+@return a new node with a vertex included
+*/
 node createNode(vertex myVertex) {
+    if(myVertex == NULL)
+        return NULL;
     node myNode = (node)malloc(sizeof(struct Node));
     myNode->myVertex = myVertex;
     myNode->next = NULL;
@@ -141,6 +166,10 @@ void shortestPath(char *mySource) {
         myGraph->allVertexes[index]->visited = FALSE;
     }
 }
+/*reorders the queue when a value has changed
+@param myQueue the queue to update
+@param myVertex the vertex that has become cheaper
+*/
 void reorderQueue(queue myQueue, vertex myVertex) {
     if(myVertex == NULL || isEmpty(myQueue))
         return;
@@ -155,6 +184,11 @@ void reorderQueue(queue myQueue, vertex myVertex) {
         addToQueue(myQueue, temp);              
     }
 }
+/*calculates the shortest distance between a source and destination city using
+djikstra's shortest path algorithm and a priority queue.
+@param source_name the name of the starting city
+@param destination_name the name of the destination city
+*/
 void shortestPathBetweenPriorityQueue(char* source_name, char* destination_name) {
     queue myQueue = createQueue();
     vertex sourceVertex = NULL;
@@ -175,20 +209,20 @@ void shortestPathBetweenPriorityQueue(char* source_name, char* destination_name)
     }
     while(!isEmpty(myQueue)) { 
         node temp = pop(myQueue);
-        if(temp->myVertex->cost == INT_MAX)
+        if(temp->myVertex->cost == INT_MAX)//no connection exists break out of the loop
             break;
-        if(strcmp(temp->myVertex->name, destination_name) == 0) {
+        if(strcmp(temp->myVertex->name, destination_name) == 0) {//destination has been found, break
             sourceVertex = temp->myVertex;
             free(temp);
             break;
         }
         for(index = 0; index < temp->myVertex->num_edges; index++) {
+            //if the cost has been decreased reset the cost, copy the new cheap source, and reorder the queue storing the nodes
             if(temp->myVertex->myEdges[index]->cost + temp->myVertex->cost < temp->myVertex->myEdges[index]->destination->cost) {
                 temp->myVertex->myEdges[index]->destination->cost = temp->myVertex->myEdges[index]->cost + temp->myVertex->cost;
                 strcpy(temp->myVertex->myEdges[index]->destination->cheap_source, temp->myVertex->name);
                 reorderQueue(myQueue, temp->myVertex->myEdges[index]->destination);
             }
-            //printQueue(myQueue);
         }
         free(temp); 
     }
@@ -196,7 +230,7 @@ void shortestPathBetweenPriorityQueue(char* source_name, char* destination_name)
         printf("\nthe cheapest cost to get to %s is %d miles", sourceVertex->name, sourceVertex->cost);
         queue myStack = createQueue();
         push(myStack, createNode(sourceVertex));    
-        while(strcmp(sourceVertex->name,source_name) != 0) {
+        while(strcmp(sourceVertex->name,source_name) != 0) {//used to back trace the path in the map
             for(index = 0; index < myGraph->num_vertexes; index++) {
                 if(strcmp(sourceVertex->cheap_source, myGraph->allVertexes[index]->name) == 0) {
                      sourceVertex = myGraph->allVertexes[index];

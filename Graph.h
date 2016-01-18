@@ -9,7 +9,7 @@
 #define FALSE 0
 #define MAX_EDGES 4
 #define MAX_COST 2000
-#define TOTAL_VERTEXES 20597 
+#define TOTAL_VERTEXES 4 
 #define CITY_LENGTH 25
 #ifndef GRAPH_H_INCLUDED
 #define GRAPH_H_INCLUDED
@@ -17,7 +17,6 @@ typedef struct Vertex *vertex;
 typedef struct Edge *edge;
 typedef struct Graph *graph;
 typedef struct Node *node;
-//typedef struct Stack *stack;
 typedef struct PriorityQueue *queue;
 int max_vertexes;
 FILE *fp;

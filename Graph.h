@@ -62,5 +62,6 @@ void addEdge(vertex mySource, vertex myDestination, int myCost);
 void deepDestroy(graph myGraph);
 void addToQueue(queue myQueue, node myNode);
 void printQueue(queue myQueue);
+void resetGraphValues(graph myGraph);
 #endif // SET_H_INCLUDED
 

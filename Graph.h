@@ -43,9 +43,6 @@ struct Graph {
     vertex * allVertexes;
     int num_vertexes;
 };
-/*struct Stack {
-    node top;
-};*/
 struct PriorityQueue {
     node front;
 };

@@ -13,15 +13,6 @@ int main()
     char cityName[CITY_LENGTH];
     char source_input[CITY_LENGTH];
     char destination_input[CITY_LENGTH];
-    /*queue myQueue = createQueue();
-    for(i = 0; i < TOTAL_VERTEXES; i++) {
-        node temp = createNode(createVertex("a"));
-        temp->myVertex->cost = rand(); 
-        printf("\ncost of %d ", temp->myVertex->cost);
-        addToQueue(myQueue, temp);   
-    }
-    printQueue(myQueue);
-    */
     while(1) {
         printf("\nenter a city(20 characters) to be added to the map(d when done/q to quit): ");
         scanf(" %[^\n]s", cityName);

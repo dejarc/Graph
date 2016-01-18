@@ -93,11 +93,6 @@ node createNode(vertex myVertex) {
     myNode->next = NULL;
     return myNode;
 }
-/*stack createStack() {
-    stack myStack = (stack)malloc(sizeof(struct Stack));
-    myStack->top = NULL;
-    return myStack;
-}*/
 void shortestPath(char *mySource) {
     printf("\nmethod 1: \n");
     int index;

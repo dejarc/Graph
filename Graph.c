@@ -118,6 +118,7 @@ node createNode(vertex myVertex) {
     myNode->next = NULL;
     return myNode;
 }
+
 void shortestPath(char *mySource) {
     printf("\nmethod 1: \n");
     int index;
@@ -256,6 +257,10 @@ void shortestPathBetweenPriorityQueue(char* source_name, char* destination_name)
     }
     free(myQueue);
 }
+/*calculates the shortest path between two cities, without utilizing a priority queue
+@param source_name the source city name
+@param destination_name the name of the destination city
+*/
 void shortestPathBetween(char* source_name, char* destination_name) {
     int index;
     vertex sourceVertex = NULL; 
@@ -276,8 +281,6 @@ void shortestPathBetween(char* source_name, char* destination_name) {
     sourceVertex->visited = TRUE;
     sourceVertex->cost = 0;
     strcpy(sourceVertex->cheap_source, sourceVertex->name);
-    //queue myQueue = createQueue();
-    //addToQueue(myQueue, createNode(sourceVertex));
     while(sourceVertex != destVertex) { 
         for(index = 0; index < sourceVertex->num_edges; index++) {
             if(sourceVertex->myEdges[index]->cost + sourceVertex->cost < sourceVertex->myEdges[index]->destination->cost) {
@@ -325,9 +328,14 @@ void shortestPathBetween(char* source_name, char* destination_name) {
     } else {
         printf("\nno connection exists between the two points");
     }
-    //free(myQueue);
 }
+/*method used to push a node to the top of a stack
+@param myStack the stack to push to
+@param myNode to node to insert on the top of the stack
+*/
 void push(queue myStack, node myNode) {
+    if(myStack == NULL || myNode == NULL)
+        return;
     if(myStack->front == NULL) {
         myStack->front = myNode;
     } else {

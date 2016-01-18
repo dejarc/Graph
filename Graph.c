@@ -140,33 +140,6 @@ void shortestPath(char *mySource) {
         myGraph->allVertexes[index]->cost = INT_MAX; 
         myGraph->allVertexes[index]->visited = FALSE;
     }
-    /*printf("\n\nmethod 2: \n");
-    myOrigin->visited = TRUE;
-    myOrigin->cost = 0;
-    num_visited = 1;
-    while(num_visited < myGraph->num_vertexes) {
-        for(index = 0; index < myOrigin->num_edges; index++) {
-            if(myOrigin->myEdges[index]->cost + myOrigin->cost < myOrigin->myEdges[index]->destination->cost) {
-                myOrigin->myEdges[index]->destination->cost = myOrigin->myEdges[index]->cost + myOrigin->cost;
-                strcpy(myOrigin->myEdges[index]->destination->cheap_source, myOrigin->name);
-            }
-        }
-        min_value = INT_MAX;
-        for(index = 0; index < myGraph->num_vertexes; index++) {
-            if(myGraph->allVertexes[index]->cost < min_value && !(myGraph->allVertexes[index]->visited)) {
-                myOrigin = myGraph->allVertexes[index]; 
-                min_value = myGraph->allVertexes[index]->cost;
-            }
-        }
-        if(min_value == INT_MAX)
-            break;
-        myOrigin->visited = TRUE;
-        num_visited++;
-    }
-    for(index = 0; index < myGraph->num_vertexes; index++) {
-        printf("\nthe cheapest path to %s is %d from %s", myGraph->allVertexes[index]->name, myGraph->allVertexes[index]->cost,
-        myGraph->allVertexes[index]->cheap_source); 
-    }*/
 }
 void reorderQueue(queue myQueue, vertex myVertex) {
     if(myVertex == NULL || isEmpty(myQueue))
@@ -179,8 +152,7 @@ void reorderQueue(queue myQueue, vertex myVertex) {
         node temp = cur->next;
         cur->next = cur->next->next;
         temp->next = NULL;
-        addToQueue(myQueue, temp);
-        //printQueue(myQueue);                
+        addToQueue(myQueue, temp);              
     }
 }
 void shortestPathBetweenPriorityQueue(char* source_name, char* destination_name) {

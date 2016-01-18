@@ -118,42 +118,45 @@ node createNode(vertex myVertex) {
     myNode->next = NULL;
     return myNode;
 }
-
+/*method used to reset all graph values to initial state
+@param myGraph the graph to reset
+*/
+void resetGraphValues(graph myGraph) {
+   int index;
+   for(index = 0; index < myGraph->num_vertexes; index++) {
+       myGraph->allVertexes[index]->cost = INT_MAX;
+       myGraph->allVertexes[index]->visited = FALSE;
+   }
+}
+/*to calculate the shortest paths to all cities from a givern vertex
+@param mySource the name of the starting city, prints error message if
+not present
+*/
 void shortestPath(char *mySource) {
-    printf("\nmethod 1: \n");
     int index;
-    int num_visited = 0;
-    int min_value;
-    vertex origin = NULL;
+    int source_present = FALSE;
+    queue myQueue = createQueue();
     for(index = 0; index < myGraph->num_vertexes; index++) {
         if(strcmp(mySource, myGraph->allVertexes[index]->name) == 0) { 
-            origin = myGraph->allVertexes[index];
-            break;
-        }    
+            myGraph->allVertexes[index]->cost = 0;
+            strcpy(myGraph->allVertexes[index]->cheap_source, myGraph->allVertexes[index]->name);
+            source_present = TRUE;
+        } 
+        addToQueue(myQueue, createNode(myGraph->allVertexes[index]));
     }
-    if(origin == NULL) {
+    if(!source_present) {
         printf("\nThat city doesn't exist!");
         return;
     }
-    vertex myOrigin = origin;
-    origin->visited = TRUE;
-    origin->cost = 0;
-    strcpy(origin->cheap_source, origin->name);
-    queue myQueue = createQueue();
-    addToQueue(myQueue, createNode(origin));
-    while(num_visited < myGraph->num_vertexes) {
-        if(isEmpty(myQueue))
-            break;
+    while(!isEmpty(myQueue)) {
         node temp = pop(myQueue); 
         if(temp->myVertex->cost == INT_MAX)
             break; 
-        num_visited++;    
         for(index = 0; index < temp->myVertex->num_edges; index++) {
             if(temp->myVertex->myEdges[index]->cost + temp->myVertex->cost < temp->myVertex->myEdges[index]->destination->cost) {
                 temp->myVertex->myEdges[index]->destination->cost = temp->myVertex->myEdges[index]->cost + temp->myVertex->cost;
                 strcpy(temp->myVertex->myEdges[index]->destination->cheap_source, temp->myVertex->name);
-                if(!(temp->myVertex->myEdges[index]->destination->visited))
-                    addToQueue(myQueue, createNode(temp->myVertex->myEdges[index]->destination)); 
+                reorderQueue(myQueue, temp->myVertex->myEdges[index]->destination);
             }
         }
         free(temp);
@@ -162,10 +165,7 @@ void shortestPath(char *mySource) {
         printf("\nthe cheapest path to %s is %d from %s", myGraph->allVertexes[index]->name, myGraph->allVertexes[index]->cost,
         myGraph->allVertexes[index]->cheap_source); 
     }
-    for(index = 0; index < myGraph->num_vertexes; index++) {
-        myGraph->allVertexes[index]->cost = INT_MAX; 
-        myGraph->allVertexes[index]->visited = FALSE;
-    }
+    free(myQueue);
 }
 /*reorders the queue when a value has changed
 @param myQueue the queue to update

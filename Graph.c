@@ -99,8 +99,9 @@ void deepDestroy(graph myGraph) {
     int graph_index;
     int edge_index;
     for(graph_index = 0; graph_index < myGraph->num_vertexes; graph_index++) {
-        for(edge_index = 0; edge_index < myGraph->allVertexes[graph_index]->num_edges; edge_index++);  
+        for(edge_index = 0; edge_index < myGraph->allVertexes[graph_index]->num_edges; edge_index++) { 
             free(myGraph->allVertexes[graph_index]->myEdges[edge_index]);
+        }
         free(myGraph->allVertexes[graph_index]->name);
         free(myGraph->allVertexes[graph_index]);
     }
